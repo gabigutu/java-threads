@@ -15,6 +15,7 @@ public class Main<myAtomicNumber> {
 
     public static Semaphore semaphoreWestToEast;
     public static Semaphore semaphoreNorthToSouth;
+    public static boolean someoneChangedSemaphore;
 
     public static void main(String[] args) throws InterruptedException {
 
@@ -32,11 +33,12 @@ public class Main<myAtomicNumber> {
 //        computeMultipleThreaded();
 
 //        myNumber = 0;
-//        lock = new ReentrantLock();
+        lock = new ReentrantLock();
 //        incrementNumberParallel();
 
         semaphoreWestToEast = new Semaphore(10);
         semaphoreNorthToSouth = new Semaphore(0);
+        someoneChangedSemaphore = false;
         crossroadSimulator();
 
     }
