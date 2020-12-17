@@ -11,7 +11,7 @@ public class Main<myAtomicNumber> {
     public static int NO_THREADS;
     public static int myNumber;
     public static AtomicInteger myAtomicNumber;
-    public static Lock lock;
+    public static Lock lock, lock2;
 
     public static Semaphore semaphoreWestToEast;
     public static Semaphore semaphoreNorthToSouth;
@@ -34,6 +34,7 @@ public class Main<myAtomicNumber> {
 
 //        myNumber = 0;
         lock = new ReentrantLock();
+        lock2 = new ReentrantLock();
 //        incrementNumberParallel();
 
         semaphoreWestToEast = new Semaphore(10);

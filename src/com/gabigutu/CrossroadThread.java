@@ -36,13 +36,13 @@ public class CrossroadThread implements Runnable {
                 Main.semaphoreNorthToSouth.acquire(); // 0 initial
                 System.out.println("Car " + carNumber + "( " + direction + ") passes through intersection [available = " + Main.semaphoreNorthToSouth.availablePermits() + "]");
 
-                Main.lock.lock();
+                Main.lock2.lock();
                 if (Main.semaphoreNorthToSouth.availablePermits() == 0 && Main.someoneChangedSemaphore == true) {
                     System.out.println("Car " + carNumber + "( " + direction + ") releases 10 permits ");
                     Main.semaphoreWestToEast.release(10); // 0 initial
                     Main.someoneChangedSemaphore = false;
                 }
-                Main.lock.unlock();
+                Main.lock2.unlock();
             } catch (InterruptedException exception) {
                 exception.printStackTrace();
             }
