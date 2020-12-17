@@ -1,23 +1,75 @@
 package com.gabigutu;
 
-public class Main {
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+public class Main<myAtomicNumber> {
 
     public static long NO_ELEMENTS;
     public static int NO_THREADS;
+    public static int myNumber;
+    public static AtomicInteger myAtomicNumber;
+    public static Lock lock;
+
+    public static Semaphore semaphoreWestToEast;
+    public static Semaphore semaphoreNorthToSouth;
 
     public static void main(String[] args) throws InterruptedException {
 
         NO_ELEMENTS = Long.valueOf(Integer.MAX_VALUE) * Long.valueOf(1);
-        NO_THREADS = 32;
-//        startExtendedThreads();
+        NO_THREADS = 200;
+
+        //        startExtendedThreads();
 //        try {
 //            starImplementedThreads();
 //        } catch (InterruptedException exception) {
 //            System.err.println("InterruptedException: " + exception.getMessage());
 //        }
 
-        computeSingleThreaded();
-        computeMultipleThreaded();
+//        computeSingleThreaded();
+//        computeMultipleThreaded();
+
+//        myNumber = 0;
+//        lock = new ReentrantLock();
+//        incrementNumberParallel();
+
+        semaphoreWestToEast = new Semaphore(10);
+        semaphoreNorthToSouth = new Semaphore(0);
+        crossroadSimulator();
+
+    }
+
+    private static void crossroadSimulator() throws InterruptedException {
+        System.out.println("Crossroad simulator");
+        Runnable crossroadThreads[] = new CrossroadThread[NO_THREADS];
+        Thread threads[] = new Thread[NO_THREADS];
+        for (int i = 0; i < NO_THREADS; i++) {
+            crossroadThreads[i] = new CrossroadThread(i, CrossroadDirectionEnum.values()[(int)Math.round(Math.random())]);
+            threads[i] = new Thread(crossroadThreads[i]);
+            threads[i].start();
+        }
+        for (int i = 0; i < NO_THREADS; i++) {
+            threads[i].join();
+        }
+    }
+
+    private static void incrementNumberParallel() throws InterruptedException {
+        System.out.println("Parallel number increment");
+        for (int step = 0; step < 1000; step++) {
+            Runnable incrementThreads[] = new IncrementThread[NO_THREADS];
+            Thread threads[] = new Thread[NO_THREADS];
+            for (int i = 0; i < NO_THREADS; i++) {
+                incrementThreads[i] = new IncrementThread();
+                threads[i] = new Thread(incrementThreads[i]);
+                threads[i].start();
+            }
+            for (int i = 0; i < NO_THREADS; i++) {
+                threads[i].join();
+            }
+        }
+        System.out.println("My number = " + myNumber);
     }
 
     private static void startExtendedThreads() {
